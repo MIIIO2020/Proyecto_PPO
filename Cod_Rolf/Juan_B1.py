@@ -11,9 +11,9 @@ import collections
 import time
 
 # Información problema
-S=50       #capacidad max y tamaño de lote
+S=5      #capacidad max y tamaño de lote
 a=0       #Demanda minima
-b=30      #Demanda maxima
+b=3      #Demanda maxima
 cost=300  #precio cerveza y costo perdida clientes
 k=100     #costo de realizar el pedido  
 price=1500
@@ -80,7 +80,7 @@ def Value_Determination_Equations(decisions,prob,descuento,costo,revenues,S,k):
                 B[i]+=-costo*(cant_comprada_i)-k
                 aux[i]=prob[cant_comprada_i+i]
             else:
-                B[i]+=-costo*(cant_comprada_i)*10000 -k#Se utliza una big M 
+                B[i]+=-costo*(cant_comprada_i)*10000*k #Se utliza una big M 
                 aux[i]=prob[i]
         else:
             aux[i]=prob[i]
@@ -88,11 +88,34 @@ def Value_Determination_Equations(decisions,prob,descuento,costo,revenues,S,k):
     aux = np.insert(aux, aux.shape[1], np.zeros(L), 1)
     aux = np.insert(aux, aux.shape[0], np.zeros(L+1), 0)
     A = np.identity(L+1)-(descuento*aux)
-    A[:,L] = 1
+    print(A)
+    A[:,L] = 0
+    A[0,L] = 1
     B = np.append(B, 0)
     X = np.linalg.solve(A,B)
     X = X[:-1]
     return X
+#funcion para obtener el valor de la ecuaciones
+
+
+
+D=np.zeros(S+1).astype('int')
+Vdet=Value_Determination_Equations(D,prob,0.9,cost,reward,S,k)                
+print(Vdet)               
+                
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 
 # =============================================================================
 # Howard’s Policy Iteration Method
@@ -160,8 +183,19 @@ def while_Search_OP(decisions,prob,descuento,costo,revenues,S,k):
 # =============================================================================
 # Fin de Funciones
 # =============================================================================
-D=np.ones(S+1).astype('int')
+    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+D=np.zeros(S+1).astype('int')
 start_time = time.time()
 Optimo=Search_OP(D,prob,tasa,cost,reward,S,k)
 print("--- %s Segundos ---" % (time.time() - start_time))
 print(Optimo)
+"""
